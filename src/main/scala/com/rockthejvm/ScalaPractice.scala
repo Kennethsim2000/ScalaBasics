@@ -52,9 +52,36 @@ object ScalaPractice extends App {
     def listFunction = () => println("Listing all elements")
     def grepFunction = (matchStr: String) => println(s"Grepping elements that matches with $matchStr")
     def removeFunction = (path: String) => println(s"Removing files under this path $path")
+//
+//    patternMatch(ListOp)
+//    patternMatch(GrepOp("hello"))
+//    patternMatch(RemoveOp("/home"))
 
-    patternMatch(ListOp)
-    patternMatch(GrepOp("hello"))
-    patternMatch(RemoveOp("/home"))
+    // Ex5: Write a sealed trait expression and multiple case classes that extends(add, multiply, subtraction, minus, constant)
+    // Have a eval method that matches this and returns an int based on evaluating
+    sealed trait Evaluation
+    case class Constant(num: Int) extends Evaluation
+    case class Add(op1: Evaluation, op2: Evaluation) extends Evaluation
+    case class Subtract(op1: Evaluation, op2:Evaluation) extends Evaluation
+    case class Multiply(op1: Evaluation, op2:Evaluation) extends Evaluation
+    case class Divide(op1:Evaluation, op2:Evaluation) extends Evaluation
+
+    def eval(operation: Evaluation): Int = {
+        operation match {
+            case Add(op1, op2) => eval(op1) + eval(op2)
+            case Subtract(op1, op2) => eval(op1) - eval(op2)
+            case Multiply(op1, op2) => eval(op1) * eval(op2)
+            case Divide(op1, op2) => eval(op1) / eval(op2)
+            case Constant(num) => num
+        }
+    }
+
+    val num1 = Constant(4)
+    val num2 = Constant(2)
+    println(eval(Add(num1, num2)))
+    println(eval(Subtract(num1, num2)))
+    println(eval(Multiply(num1, num2)))
+    println(eval(Divide(num1, num2)))
+
 
 }
