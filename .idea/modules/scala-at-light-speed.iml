@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module external.linked.project.id="scala-at-light-speed [file:/Users/user/Documents/github/scala-at-light-speed/]" external.linked.project.path="$MODULE_DIR$/../.." external.root.project.path="$MODULE_DIR$/../.." external.system.id="SBT" type="JAVA_MODULE" version="4">
+<module external.linked.project.id="scalabasics [file:/Users/simzhefengkenneth/Documents/github/ScalaBasics/]" external.linked.project.path="$MODULE_DIR$/../.." external.root.project.path="$MODULE_DIR$/../.." external.system.id="SBT" type="JAVA_MODULE" version="4">
   <component name="DisplayModuleName">
     <option name="name" value="scala-at-light-speed" />
   </component>
