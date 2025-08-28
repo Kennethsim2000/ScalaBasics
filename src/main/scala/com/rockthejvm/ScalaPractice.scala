@@ -24,6 +24,15 @@ object ScalaPractice extends App {
 //    println(multiplyByTwo(4))
 //    println(multiplyByThree(4))
 
+    // create two functions, and use the keyword compose to compose the two functions, use and then as well
+
+    val func1 = (num:Int) => num + 4
+    val func2 = (num:Int) => num * 2
+
+    val funcComposed = func1 compose func2 // func1(func2(x))
+    val funcAndThen = func2 andThen func1
+    println(funcComposed(3))
+    println(funcAndThen(3))
 
 
 }
