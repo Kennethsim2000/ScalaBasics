@@ -12,6 +12,18 @@ object ScalaPractice extends App {
 //    println(evaluate(addTwo, 2))
 //    println(evaluate(multiplyTwo, 3))
 
-    
+    // Ex2: Write a function called multiply that takes in an element, and returns a function that takes in y,
+    // and returns x * y. With this, we can create functions multiplyByTwo, multiplyByThree
+
+    def multiply(num: Int): Int => Int = {
+        (x: Int) => num * x
+    }
+
+    val multiplyByTwo = multiply(2)
+    val multiplyByThree = multiply(3)
+//    println(multiplyByTwo(4))
+//    println(multiplyByThree(4))
+
+
 
 }
