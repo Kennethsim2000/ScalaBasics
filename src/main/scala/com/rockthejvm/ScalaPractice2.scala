@@ -1,6 +1,8 @@
 package com.rockthejvm
 
+import scala.collection.mutable.ListBuffer
 import scala.math.pow
+import scala.util.Random
 
 object ScalaPractice2 extends App {
     //Ex 1: Write a function that takes as its argument a String value describing an operation to be carried out on a pair of integers.
@@ -33,7 +35,25 @@ object ScalaPractice2 extends App {
 
     val seq1 = Seq(1,2,3,4,5)
     val seqRemoved = remove(seq1, 1)
-    println(seqRemoved) // 1,3,4,5
+//    println(seqRemoved) // 1,3,4,5
+
+    //Ex 3. Write a program that plays the UK National Lottery. This involves selecting 6 random integer between 1 and 49.
+    // Clearly the numbers selected must be unique. Investigate the Random type for selecting numbers, and choose an
+    // appropriate collection type to store the numbers. Display the numbers in ascending order.
+    //Clue: Explore the random type, and insert elements into the collection
+    val random = new Random()
+
+    // This version guarantees uniqueness
+    val shuffledList = random.shuffle(1 to 49).take(6).sorted
+    println(shuffledList)
+
+    // This version does not guarantee uniqueness
+    val myList = List.fill(6)(random.between(1,49))
+    val newList = myList.sorted
+    println(newList)
+
+
+
 
 
 }
