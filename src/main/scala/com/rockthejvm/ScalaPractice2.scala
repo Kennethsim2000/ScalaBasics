@@ -56,14 +56,8 @@ object ScalaPractice2 extends App {
     //Ex 4:
     //Generate a list of the names of all the _files_ in the current directory, excluding the "hidden" files (i.e. those whose names start with ".").
     //Generate two lists of entries in the directory, one containing the files and one containing the directories.
-    //Generate a list of Pair objects, each containing the name of a file and its size in bytes.
 
-    // TODO: COMPLETE THE REST
-    //Generate a list of the 10 smallest_files_ in the directory, in order, together with their sizes. Do the same for the 10 largest files.
-    //Modify your answer to the above to return a Map where the keys are the names and the values are the sizes Generate
-    // a data structure that arranges the contents of the directory according the the first letter of their name. In other words,
-    // for letter 'a' there should be a list of the entries with names beginning with 'a', and so on...
-
+    case class FileDetails(fileName: String, length: Long)
     val currDir = new File(".")
     val filesAndDir = currDir.listFiles().toList;
     val filesInCurrDir = filesAndDir.filter(_.isFile)
@@ -72,18 +66,36 @@ object ScalaPractice2 extends App {
     println(filesAndDir)
     println(filesInCurrDir)
 
+    //Generate a list of Pair objects, each containing the name of a file and its size in bytes.
+    // method 1
     val filePairs = for {
         file <- filesInCurrDir
     } yield (file.getName, file.length())
+    val fileDetails:List[FileDetails] = filePairs.map {
+        case (name, len) => FileDetails(name, len)
+    }
+    //method 2
     val filePairs2 = fileNames.zip(fileSizes)
     println(filePairs)
     println(filePairs2)
 
+    //Generate a list of the 10 smallest_files_ in the directory, in order, together with their sizes. (sort by file in ascending order)
+    // Do the same for the 10 largest files. (sort by file size in descending order)
+    val orderAscend:Ordering[FileDetails] = Ordering.by(_.length)
+    val orderedBySizeAscend = fileDetails.sorted(orderAscend)
+    val orderedBySizeDescend = fileDetails.sorted(orderAscend.reverse)
+    println("After ordering by size")
+    println(orderedBySizeAscend)
+    println(orderedBySizeDescend)
 
+    //Modify your answer to the above to return a Map where the keys are the names and the values are the sizes
+    val mapNameToSize = fileDetails.map(fileDetail => fileDetail.fileName -> fileDetail.length).toMap
+    println("After converting to map")
+    println(mapNameToSize)
 
-
-
-
-
-
+    // Generate a data structure that arranges the contents of the directory according the first letter of their name. In other words,
+    // for letter 'a' there should be a list of the entries with names beginning with 'a', and so on...
+    println("Grouping by first letter")
+    val map = filesAndDir.groupBy(_.getName.charAt(0))
+    println(map)
 }
