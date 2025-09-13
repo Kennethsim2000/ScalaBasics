@@ -10,8 +10,6 @@ object ScalaPractice5 extends App {
     // add(e) - add element e to the List
     //Generalise this list into a generic type, where the type parameter represents element type
     //Make the list covariant in the element type.
-    //Clue: have a sealed abstract class ListOfint with the count, contains, sum and add method, case object Emptyint extends ListOfint
-    //case class Consint(head: Int, tail: ListOfint) extends ListOflnt
 
     sealed abstract class ListOfInt {
         val count:Int
