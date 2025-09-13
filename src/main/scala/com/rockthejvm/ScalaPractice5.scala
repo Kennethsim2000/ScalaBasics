@@ -56,4 +56,52 @@ object ScalaPractice5 extends App {
     println(twoObject.contains(3)) // should be false
     twoObject.printList()
 
+
+    //Making it generic
+    case class People(name:String, age:Int)
+
+    sealed abstract class ListOfGeneric[T] {
+        val count: Int
+        def contains(elem: T): Boolean
+        def add(elem: T): ListOfGeneric[T]
+        def printList(): Unit
+    }
+
+    case object EmptyListPeople extends ListOfGeneric[People] {
+        override val count: Int = 0
+        override def contains(elem: People): Boolean = false
+        override def add(elem: People): ListOfGeneric[People] = NonEmptyListPeople(elem, EmptyListPeople)
+        override def printList(): Unit = {
+            println(".")
+            println("end of list")
+        }
+    }
+
+    case class NonEmptyListPeople(head: People, tail: ListOfGeneric[People]) extends ListOfGeneric[People] {
+        override val count: Int = 1 + tail.count
+
+        override def contains(elem: People): Boolean =
+            if (head == elem) {
+                true
+            } else {
+                tail.contains(elem)
+            }
+
+        override def add(elem: People): ListOfGeneric[People] = NonEmptyListPeople(elem, tail.add(head))
+
+        override def printList(): Unit = {
+            print(s"$head + ")
+            tail.printList()
+        }
+    }
+
+    val emptyLstPeople = EmptyListPeople
+    val person1 = People("Kenneth", 25)
+    val person2 = People("Jamie", 21)
+    val person3 = People("NotInside", 25)
+    val onePersonList = emptyLstPeople.add(person1)
+    val twoPersonList = onePersonList.add(person2)
+    println(twoPersonList.contains(person2)) // should be true
+    println(twoPersonList.contains(person3)) // should be false
+    twoPersonList.printList()
 }
