@@ -36,6 +36,5 @@ object ScalaPractice4 extends App {
 
     val seqSquareRoot = Seq(-1, -4, 4, 1, 9, -9);
     applySeq(seqSquareRoot)
-
 }
 
