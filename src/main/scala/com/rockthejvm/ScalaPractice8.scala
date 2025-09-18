@@ -2,7 +2,8 @@ package com.rockthejvm
 
 import scala.util.{Failure, Success, Try}
 import java.net.URL
-import java.io.InputStream
+import java.io.{BufferedReader, InputStream, InputStreamReader}
+import scala.jdk.CollectionConverters._
 
 object ScalaPractice8 extends App {
     //Ex1. The class java.net.URL is used to represent an endpoint of communication that is identified by a URL.
@@ -35,14 +36,14 @@ object ScalaPractice8 extends App {
     // and getInputStream from it, have a if else statement to see if we want to use proxy or not.
 
 
-    def readUrl(url: String, useProxy: Boolean):Try[InputStream] = {
+    def readUrl(url: String):Try[InputStream] = {
         val urlObj = parseUrl(url)
         urlObj.flatMap(url=> Try(url.openConnection()))
             .flatMap(connection=> Try(connection.getInputStream))
     }
     //At each step, exceptions are caught inside Try. The whole chain is resilient — if any step throws, the result is a Failure.
 
-    def readUrl2(url: String, useProxy: Boolean): Try[InputStream] = {
+    def readUrl2(url: String): Try[InputStream] = {
         val urlObj = parseUrl(url).map(url => url.openConnection())
             .map(connection => connection.getInputStream)
         urlObj
@@ -52,4 +53,29 @@ object ScalaPractice8 extends App {
     //If url.openConnection() or connection.getInputStream throws, the exception escapes the map instead of being wrapped in a Try.
     //So effectively: readUrl2 only catches errors from parseUrl.
     //Failures inside openConnection() or getInputStream are not converted to Failure, they’ll just blow up your program with an exception.
+
+    //Ex3: The last stage is to define a function that builds on the work above, and returns Try [Iterator [String]] ,
+    // where the Iterator takes us through each line of content in the URL, with the Failure branch of the Try containing
+    // the Exception that caused the problem.
+    //This extends the sequence of flatMap calls used above, or to simplify it could be written as a for comprehension.
+
+    //Clue: use a for comprehension to obtain a try[INputStream] from part 2, obtain the stream from it, call new
+    // BufferedReader(new InputSTreamReader(stream)), wrap in Try, and obtain the reader, then yield reader.lines().iterator.asScala
+
+    def getIterator(url:String): Try[Iterator[String]] = {
+        val inputStreamObj = readUrl(url)
+        val iterator = for {
+            inputStream <- inputStreamObj
+            reader <- Try(BufferedReader(new InputStreamReader(inputStream)))
+        } yield reader.lines().iterator().asScala
+        iterator
+    }
+
+    val iterator = getIterator("https://www.google.com")
+    iterator match {
+        case Success(it) => it.take(10).foreach(line => println(line))
+        case Failure(exception) => println(s"Encountered exception: $Exception()")
+    }
+
+
 }
