@@ -40,12 +40,14 @@ object ScalaPractice9 extends App {
     //Using the fold method that was defined on the MyList (A] type, implement the following methods:
     //contains (el: A)
     //drop (i: Int) (remove the first i elements from the list) |
+    //dropWhile(o: A Boolean) (remove elements from the front of the list until predicate o is false)
 
     sealed trait MyList[T] {
         def fold[B](initial: B, func: (B, T) => B ): B
         def contains(value: T):Boolean
         def add(elem: T): MyList[T]
         def drop(i: Int): MyList[T]
+        def dropWhile(pred: Int => Boolean): MyList[T]
     }
 
     case object emptyList extends MyList[Int] {
@@ -53,6 +55,7 @@ object ScalaPractice9 extends App {
         override def contains(value: Int): Boolean = false
         override def add(elem: Int): MyList[Int] = nonEmptyList(elem, emptyList)
         override def drop(i: Int): MyList[Int] = emptyList // cannot drop on an emptyList
+        override def dropWhile(pred: Int => Boolean): MyList[Int] = emptyList
     }
 
     case class nonEmptyList(head: Int, tail: MyList[Int]) extends MyList[Int] {
@@ -79,21 +82,32 @@ object ScalaPractice9 extends App {
             val reversedList = resultList.fold(emptyList, (a: MyList[Int], b) => a.add(b))
             reversedList
         }
+        override def dropWhile(pred: Int => Boolean): MyList[Int] = {
+            val resultList = fold(emptyList: MyList[Int] , (accumulatedList: MyList[Int], elem) => {
+                if(pred(elem)) {
+                    accumulatedList
+                } else {
+                    accumulatedList.add(elem)
+                }
+            })
+            // since our add inserts at head, we will get a reversed list
+            val reversedList = resultList.fold(emptyList, (a: MyList[Int], b) => a.add(b))
+            reversedList
+        }
     }
 
     val myList = nonEmptyList(1, nonEmptyList(2, nonEmptyList(3, emptyList)))
     val sum = myList.fold(0, (a, b) => a + b)
     val droppedFirst = myList.drop(1)
+    val dropEven = myList.dropWhile(x=> x % 2 == 0)
     println(s"sum is $sum")
     println(s"number 3 is inside the list:${myList.contains(3)}")
     println(s"number 4 is inside the list:${myList.contains(4)}")
     println(s"Dropped one element from list:$droppedFirst")
-
+    println(s"Dropped even from list:$dropEven")
 
 }
 
-//drop (i: Int) (remove the first i elements from the list) |
-//dropWhile(o: A Boolean) (remove elements from the front of the list until predicate o is false)
 //Look at the documentation for the built-in List (+A) class. Use the foldLeft method to implement reverse on an instance of this class. Can you add this capability to the MyList (A) class?
 //Binary tree is a type that can also be defined easily using a recursive ADT: A tree is o a leaf node, which contains a value
 //o an internal node, which contains a left node and a right node
