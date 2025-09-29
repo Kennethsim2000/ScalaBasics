@@ -31,16 +31,34 @@ object ScalaPractice9 extends App {
     }
 
     val friday = Friday
-    println(tomorrow(friday))
-    println(nextWorkingDay(friday))
+//    println(tomorrow(friday))
+//    println(nextWorkingDay(friday))
 
-    abstract class MyList[T] {
-        val head: T
-        val tail: MyList[T]
+    //Ex2: What changes would you need to make to make the Box type covariant in its type parameter? Make the same changes to the MyList type.
+    sealed trait MyList[+T] {
+        def fold[B](initial: B, func: (B, T) => B ): B
     }
+
+    case object emptyList extends MyList[Int] {
+        override def fold[B](initial: B, func: (B, Int) => B): B = initial
+
+    }
+
+    case class nonEmptyList(head: Int, tail: MyList[Int]) extends MyList[Int] {
+        // what fold does is that it provides an initial, and every element, it will call func on the element
+        override def fold[B](initial: B, func: (B, Int) => B): B = {
+            val acc = func(initial, head)
+            tail.fold(acc, func)
+        }
+    }
+
+    val myList = nonEmptyList(1, nonEmptyList(2, nonEmptyList(3, emptyList)))
+    val sum = myList.fold(0, (a, b) => a + b)
+    println(sum)
+
 }
 
-//Define a simple ADT to represent days of the week. Implement the methods tomorrow and nextWorkingDay for your type.
+
 //What changes would you need to make to make the Box type covariant in its type parameter? Make the same changes to the MyList type.
 //Using the fold method that was defined on the MyList (A] type, implement the following methods:
 //contains (el: A)|
