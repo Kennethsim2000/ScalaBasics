@@ -17,7 +17,6 @@ object ScalaPractice10 extends App {
         def fold: Int
     }
     case class NormalNode(var value: Int, leftNode: Node, rightNode: Node) extends Node {
-
         override def fold: Int = 1 + leftNode.fold + rightNode.fold
     }
     case class LeafNode(var value: Int) extends Node {
