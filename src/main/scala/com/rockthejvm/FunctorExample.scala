@@ -1,6 +1,6 @@
 package com.rockthejvm
 
-object FunctorExample extends Object {
+object FunctorExample extends App {
     sealed trait Box[A] {
         def map[B](f: A => B) = {
             this match {
@@ -10,7 +10,7 @@ object FunctorExample extends Object {
         }
 
         // same as option fold, if empty, return provided empty, else apply function
-        def fold[B](empty: B)(f: A => B) = this match {
+        def fold[B](empty: B)(f: A => B): B = this match {
             case Empty() => empty
             case Full(v) => f(v)
         }
@@ -20,4 +20,9 @@ object FunctorExample extends Object {
 
     case class Full[A](val value: A) extends Box[A]
 
+    val e: Box[Int] = Empty()
+    val f: Box[Int] = Full(3)
+
+    println(e.map(x => x * 2))
+    println(f.map(x => x * 2))
 }
