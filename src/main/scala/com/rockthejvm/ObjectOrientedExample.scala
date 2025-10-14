@@ -1,6 +1,7 @@
 package com.rockthejvm
 
 class Trade(val id: String, val symbol: String, val quantity: Int, val initialPrice: Double) {
+    require(quantity > 0)  // will prevent the object from being constructed by throwing an illegalArgumentException
     override def toString: String = s"Trade id: $id consist of symbol: $symbol, price: $price and quantity: $quantity"
     private var _price = initialPrice
     def price = _price // getter method
