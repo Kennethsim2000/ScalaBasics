@@ -1,5 +1,7 @@
 package com.rockthejvm
 
+import java.time.{LocalDate, Period}
+
 class Trade(val id: String, val symbol: String, val quantity: Int, val initialPrice: Double) {
     require(quantity > 0)  // will prevent the object from being constructed by throwing an illegalArgumentException
     override def toString: String = s"Trade id: $id consist of symbol: $symbol, price: $price and quantity: $quantity"
@@ -22,6 +24,13 @@ object Trade {
 
 case class Trade2(val id: String, val symbol: String, val quantity: Int, var price: Double)
 
+class Person(val dob: LocalDate, val name:String) {
+    def age: Int = {
+        val period = Period.between(dob, LocalDate.now())
+        period.getYears
+    }
+}
+
 object ObjectOrientedExample extends App {
     val trade = Trade("id", "FB", 100, 10.0)
     trade.price = 20.0
@@ -30,4 +39,6 @@ object ObjectOrientedExample extends App {
     val trade2 = Trade2("id", "FB", 100, 10.0)
     trade2.price = 30.0
     println(trade2)
+    val person: Person = Person(LocalDate.of(1990, 5, 15), "kenneth")
+    println(person.age)
 }
